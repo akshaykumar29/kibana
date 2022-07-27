@@ -1,0 +1,35 @@
+create 2 servers, 1 for kibana conf(t3 medium) and 1 for prod server
+install docker on both of the servers and docker-compose too
+now create a dir with elk 
+cd elk 
+mkdir logstash
+cd logstash
+vim logstash.conf
+cd ../..
+mkdir temp 
+vim inlog.log (put anything here ex helo ki haal h)
+cd elk
+vim docker-compose.yml 
+docker-compose up -d 
+now browse with our ip and port no 5061
+
+Now go to prod server, here config agent to fetch logs to kibana
+Filebeat:-
+docker pull docker.elastic.co/beats/filebeat:7.17.5
+
+
+docker run \
+docker.elastic.co/beats/filebeat:7.17.5 \
+setup -E setup.kibana.host=kibana_server_IP:5601 \
+-E output.elasticsearch.hosts=["KIBANA_SERVER_IP:9200"]
+
+curl -L -O https://raw.githubusercontent.com/elastic/beats/7.17/deploy/docker/filebeat.docker.yml
+
+open filebeat.yml file
+
+
+remove below all the mentioned contents till :-
+
+processors:
+- add_cloud_metadata: ~
+:wq
